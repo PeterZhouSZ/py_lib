@@ -1,9 +1,10 @@
+#!/usr/bin/env python
 """
 Print-related utility functions.
 
 History
-  create  -  Feng Zhou (zhfe99@gmail.com), 03-19-2015
-  modify  -  Feng Zhou (zhfe99@gmail.com), 2015-08
+  create  -  Feng Zhou (zhfe99@gmail.com), 2015-03
+  modify  -  Feng Zhou (zhfe99@gmail.com), 2015-11
 """
 import os
 import sys
