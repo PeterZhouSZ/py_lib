@@ -4,12 +4,10 @@ Init.
 
 History
   create  -  Feng Zhou (zhfe99@gmail.com), 2015-09
-  modify  -  Feng Zhou (zhfe99@gmail.com), 2015-09
+  modify  -  Feng Zhou (zhfe99@gmail.com), 2015-11
 """
 import os
-if not os.path.exists('/mnt/develop') and \
-   not os.path.exists('/home/ubuntu') and \
-   not os.environ['host_name'] == 'skyserver9k':
+if os.getenv('has_display', '0') == '1':
   from sh import *
 from pri import *
 from util import *
@@ -31,7 +29,5 @@ def init(prL=2, isOut=False):
   """
   prSet(prL)
   np.seterr(under='ignore')
-  if not os.path.exists('/mnt/develop') and \
-     not os.path.exists('/home/ubuntu') and \
-     not os.environ['host_name'] == 'skyserver9k':
+  if os.getenv('has_display', '0') == '1':
     shIni(isOut=isOut)
