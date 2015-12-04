@@ -4,7 +4,7 @@ IO utility functions.
 
 History
   create  -  Feng Zhou (zhfe99@gmail.com), 2015-03
-  modify  -  Feng Zhou (zhfe99@gmail.com), 2015-10
+  modify  -  Feng Zhou (zhfe99@gmail.com), 2015-12
 """
 import os
 import csv
@@ -36,7 +36,7 @@ def saveLns(outpath, lines, subx='\n'):
     lines    -  lines, 1 x n (list)
     subx     -  subfix of each line, {None} | '\n' | ...
   """
-  assert(outpath.__class__ == str)
+  assert outpath.__class__ == str
   fio = open(outpath, 'w')
   for line in lines:
     try:
@@ -71,15 +71,20 @@ def mkDir(dirPath, mkL=0):
       os.makedirs(dirPath)
 
 
-def cpFile(pathSrc, pathDst):
+def cpFile(pathSrc, pathDst, svL=1):
   """
   Copy file.
 
   Input
     pathSrc  -  src path
     pathDst  -  dst path
+    svL      -  save level, {1} | 2
+                  1: write to pathDst even it exist
+                  2: not write to pathDst if it exist
   """
   import shutil
+  if os.path.exists(pathDst) and svL == 1:
+    return
   shutil.copyfile(pathSrc, pathDst)
 
 
@@ -101,7 +106,10 @@ def save(filepath, data, svL=1):
   Input
     filepath  -  file name
     data      -  data
-    svL       -  save level
+    svL       -  save level, 0 | {1} | 2
+                  0: write to pathDst even it exist
+                  1: write to pathDst even it exist
+                  2: not write to pathDst if it exist
   """
   import cPickle
 
