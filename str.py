@@ -193,13 +193,21 @@ def str2ran(s):
     call:  lst = str2ran(s)
     output: lst = [1,3]
 
+  Example 5
+    input: s = ''
+    call:  lst = str2ran(s)
+    output: lst = []
+
   Input
     s    -  string
 
   Output
     lst  -  an integer list
   """
-  if ':' in s:
+  if len(s) == 0:
+    lst = []
+
+  elif ':' in s:
     parts = s.split(':')
     a = [int(part) for part in parts]
 
