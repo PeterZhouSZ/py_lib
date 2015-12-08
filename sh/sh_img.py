@@ -8,6 +8,7 @@ History
 """
 import matplotlib.pyplot as plt
 
+
 def shImg(img, isFilt=False, ax=None):
   """
   Show image.
@@ -33,6 +34,7 @@ def shImg(img, isFilt=False, ax=None):
 
   _ = plt.axis('off')
 
+
 def shImgs(imgs, axs, labs=None):
   """
   Show multiple images.
@@ -48,7 +50,8 @@ def shImgs(imgs, axs, labs=None):
       if labs is not None:
           plt.title(labs[i])
 
-def shSv(fold, prex, type='pdf'):
+
+def shSvFold(fold, prex, type='pdf'):
   """
   Save image.
 
@@ -60,6 +63,7 @@ def shSv(fold, prex, type='pdf'):
   from py_lib.fio import savePath
   imgPath = savePath(fold, prex)
   shSvPath(imgPath, type=type)
+
 
 def shSvPath(imgPath, type='pdf', dpi=None):
   """
@@ -77,6 +81,7 @@ def shSvPath(imgPath, type='pdf', dpi=None):
     plt.savefig('{}.{}'.format(imgNm, type), format=type)
   else:
     plt.savefig('{}.{}'.format(imgNm, type), format=type, dpi=dpi)
+
 
 def shBox(box):
   """
