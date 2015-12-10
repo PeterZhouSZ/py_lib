@@ -20,6 +20,7 @@ def dctSub(dct0, keys):
   """
   return dict((key, dct0[key]) for key in keys)
 
+
 def dctItem(dct, idx):
   """
   Return a list of items for the corresponding index.
@@ -41,6 +42,7 @@ def dctItem(dct, idx):
     vals.append(val)
   return keys, vals
 
+
 def lns2dct(lns, sep=':'):
   """
   Generate dictionary from lines.
@@ -59,3 +61,31 @@ def lns2dct(lns, sep=':'):
     dct[parts[0]] = parts[1]
 
   return dct
+
+
+def ps(dct, key, val0):
+  """
+  Parse the parameter specified in a struct or in a cell array.
+
+  Example 1 (when option is a struct):
+    input    -  dct['lastname'] = 'zhou';
+    call     -  value = ps(dct, 'lastname', 'noname');
+    output   -  value = 'zhou'
+
+  Example 2 (when option is a cell array):
+    input    -  option = {'lastname', 'zhou'};
+    call     -  value = ps(option, 'lastname', 'noname');
+    output   -  value = 'zhou'
+
+  Input
+    dct      -  dictionary
+    key      -  filed name
+    val0     -  default field value
+  """
+  if dct is None:
+    return val0
+
+  if not dct.has_key(key):
+    return val0
+
+  return dct[key]
