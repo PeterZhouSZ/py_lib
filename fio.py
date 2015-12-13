@@ -203,14 +203,14 @@ def savePath(fold, prex, subx=None, type=None):
 
   # subfix
   if subx is not None:
-      prex = prex + '_' + subx
+    prex = prex + '_' + subx
 
   if type is None:
-      path = os.path.join(saveFold, prex)
+    path = os.path.join(saveFold, prex)
   elif type == 'txt':
-      path = os.path.join(saveFold, prex + '.txt')
+    path = os.path.join(saveFold, prex + '.txt')
   else:
-      raise Exception('unknown type: {}'.format(type))
+    raise Exception('unknown type: {}'.format(type))
   return path
 
 
@@ -387,65 +387,65 @@ def getch():
 
 
 def loadCsv(csvPath, nLnSkip=0, delimiter=',', quotechar=None):
-    """
-    Load from csv.
+  """
+  Load from csv.
 
-    Input
-      csvPath    -  csv path
-      nLnSkip    -  #line to skip in the header, {0} | ...
-      delimiter  -  delimiter, {','} | ...
-      quotechar  -  quotechar, {None} | ...
+  Input
+    csvPath    -  csv path
+    nLnSkip    -  #line to skip in the header, {0} | ...
+    delimiter  -  delimiter, {','} | ...
+    quotechar  -  quotechar, {None} | ...
 
-    Output
-      dcts       -  symbol list, n x
-      keys       -  key list, nKey x
-    """
-    dcts = []
-    with open(csvPath, 'rb') as csvfile:
-        csvHa = csv.reader(csvfile, delimiter=delimiter, quotechar=quotechar)
-        for i, row in enumerate(csvHa):
-            # skip line
-            if i < nLnSkip:
-                continue
+  Output
+    dcts       -  symbol list, n x
+    keys       -  key list, nKey x
+  """
+  dcts = []
+  with open(csvPath, 'rb') as csvfile:
+    csvHa = csv.reader(csvfile, delimiter=delimiter, quotechar=quotechar)
+    for i, row in enumerate(csvHa):
+      # skip line
+      if i < nLnSkip:
+        continue
 
-            # field name
-            if i == nLnSkip:
-                keys = row
-                nKey = len(row)
-                continue
+      # field name
+      if i == nLnSkip:
+        keys = row
+        nKey = len(row)
+        continue
 
-            # symbol
-            assert(len(row) == nKey)
-            dct = {}
-            for iKey, key in enumerate(keys):
-                dct[key] = row[iKey]
-            dcts.append(dct)
-    return dcts, keys
+      # symbol
+      assert(len(row) == nKey)
+      dct = {}
+      for iKey, key in enumerate(keys):
+        dct[key] = row[iKey]
+      dcts.append(dct)
+  return dcts, keys
 
 
 def lmdbRIn(lmdbPath):
-    """
-    Get the lmdb handle of a given sequence.
+  """
+  Get the lmdb handle of a given sequence.
 
-    Input
-      lmdbPath  -  path of the lmdb file
+  Input
+    lmdbPath  -  path of the lmdb file
 
-    Output
-      ha        -  handles
-    """
-    import lmdb
+  Output
+    ha        -  handles
+  """
+  import lmdb
 
-    # path file
-    env = lmdb.open(lmdbPath)
-    txn = env.begin()
-    cur = txn.cursor()
+  # path file
+  env = lmdb.open(lmdbPath)
+  txn = env.begin()
+  cur = txn.cursor()
 
-    # store
-    ha = {'env': env,
-          'cur': cur,
-          'co': 0,
-          'lmdb': lmdbPath}
-    return ha
+  # store
+  ha = {'env': env,
+        'cur': cur,
+        'co': 0,
+        'lmdb': lmdbPath}
+  return ha
 
 
 def lmdbR(ha):

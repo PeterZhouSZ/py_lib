@@ -9,7 +9,7 @@ History
 import matplotlib.pyplot as plt
 
 
-def shImg(img, isFilt=False, ax=None):
+def shImg(img, isFilt=False, ax=None, cmap=None):
   """
   Show image.
 
@@ -28,9 +28,9 @@ def shImg(img, isFilt=False, ax=None):
     img = img.transpose(1, 2, 0)
 
   if len(img.shape) == 2 or img.shape[2] > 1:
-    plt.imshow(img)
+    plt.imshow(img, cmap=cmap)
   else:
-    plt.imshow(img[:, :, 0])
+    plt.imshow(img[:, :, 0], cmap=cmap)
 
   _ = plt.axis('off')
 
