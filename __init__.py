@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Init.
+Init py_lib module.
 
 History
   create  -  Feng Zhou (zhfe99@gmail.com), 2015-09
@@ -26,7 +26,6 @@ def init(prL=2, isOut=False):
     prL    -  prompt level, {2} | 3 | ...
     isOut  -  output mode, True | {False}
   """
-  import pdb; pdb.set_trace()
   prSet(prL)
   np.seterr(under='ignore')
   if os.getenv('has_display', '0') == '1':
