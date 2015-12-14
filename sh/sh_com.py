@@ -35,7 +35,8 @@ def shIni(isOut=False):
 
 
 def iniAx(fig, rows, cols, siz=None, wGap=.2, hGap=.2,
-          pos=[0, 0, 1, 1], flat=True, sizMa=[20, 20], hs=None, ws=None, dpi=None):
+          pos=[0, 0, 1, 1], flat=True, sizMa=[20, 20],
+          hs=None, ws=None, dpi=None):
   """
   Create axes.
 
