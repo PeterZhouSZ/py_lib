@@ -9,6 +9,7 @@ History
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 def shIni(isOut=False):
   """
   Init figure setting.
@@ -32,8 +33,9 @@ def shIni(isOut=False):
     # import matplotlib as mpl
     # mpl.rcParams['toolbar'] = 'None'
 
+
 def iniAx(fig, rows, cols, siz=None, wGap=.2, hGap=.2,
-        pos=[0, 0, 1, 1], flat=True, sizMa=[20, 20], hs=None, ws=None, dpi=None):
+          pos=[0, 0, 1, 1], flat=True, sizMa=[20, 20], hs=None, ws=None, dpi=None):
   """
   Create axes.
 
@@ -92,17 +94,18 @@ def iniAx(fig, rows, cols, siz=None, wGap=.2, hGap=.2,
 
   Ax = np.empty((rows, cols), dtype=object)
   for row in range(rows):
-      for col in range(cols):
-        rect = [wMar * (col + 1) + wws[col] + pos[0],
-                hMar * (rows - row) + hhs[rows - row - 1] + pos[1],
-                wBodys[col + 1], hBodys[row]]
-        # print rect
-        Ax[row, col] = plt.axes(rect)
+    for col in range(cols):
+      rect = [wMar * (col + 1) + wws[col] + pos[0],
+              hMar * (rows - row) + hhs[rows - row - 1] + pos[1],
+              wBodys[col + 1], hBodys[row]]
+      # print rect
+      Ax[row, col] = plt.axes(rect)
 
   if flat:
     return Ax.flatten()
   else:
     return Ax
+
 
 def setAx(ax):
   """
@@ -115,11 +118,13 @@ def setAx(ax):
     fig = plt.gcf()
     fig.sca(ax)
 
+
 def show():
   """
   A wrapper of plt.show()
   """
   plt.show(block=False)
+
 
 def setTick(xy, labs, ori='hor', siz=0):
   """
@@ -140,7 +145,7 @@ def setTick(xy, labs, ori='hor', siz=0):
   elif xy == 'y':
     locs, labels = plt.yticks(ran, labs)
   else:
-      raise Exception('unknown xy: {}'.format(xy))
+    raise Exception('unknown xy: {}'.format(xy))
 
   # text orientation
   if xy == 'x' and ori == 'ver':
@@ -149,6 +154,7 @@ def setTick(xy, labs, ori='hor', siz=0):
   # font size
   if siz > 0:
     plt.setp(labels, fontsize=siz)
+
 
 def shBox(box, cl='r'):
   """
@@ -165,6 +171,7 @@ def shBox(box, cl='r'):
   yEd = box[0, 1] - 1
 
   plt.plot([xHd, xEd, xEd, xHd, xHd], [yHd, yHd, yEd, yEd, yHd], '-', color=cl)
+
 
 def genMkCl(c=-1):
   """

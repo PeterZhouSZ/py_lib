@@ -8,7 +8,6 @@ History
 """
 import matplotlib.pyplot as plt
 
-
 def shImg(img, isFilt=False, ax=None, cmap=None):
   """
   Show image.

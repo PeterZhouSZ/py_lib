@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 from py_lib.cell import cells
 from sh_com import genMkCl
 
-
 def shHst(mes, devs=[], ax=None, xs=[], barWid=0.8, devWid=0.8, bdWid=0, ori='ver', clG=None):
   """
   Plot histogram.

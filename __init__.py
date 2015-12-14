@@ -4,11 +4,9 @@ Init.
 
 History
   create  -  Feng Zhou (zhfe99@gmail.com), 2015-09
-  modify  -  Feng Zhou (zhfe99@gmail.com), 2015-11
+  modify  -  Feng Zhou (zhfe99@gmail.com), 2015-12
 """
 import os
-if os.getenv('has_display', '0') == '1':
-  from sh import *
 from pri import *
 from util import *
 from img import *
@@ -18,6 +16,7 @@ from match import *
 from str import *
 from dct import *
 from dst import *
+from sh import *
 
 def init(prL=2, isOut=False):
   """
