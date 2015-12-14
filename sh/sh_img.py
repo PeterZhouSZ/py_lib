@@ -8,6 +8,7 @@ History
 """
 import matplotlib.pyplot as plt
 
+
 def shImg(img, isFilt=False, ax=None, cmap=None):
   """
   Show image.
@@ -82,26 +83,27 @@ def shSvPath(imgPath, type='pdf', dpi=None):
     plt.savefig('{}.{}'.format(imgNm, type), format=type, dpi=dpi)
 
 
-def shBox(box):
+def shBox(Box, cl):
   """
-  Show box on image.
+  Show a bounding box on 2D image.
 
   Input
-    box  -  bounding box, 2 x 2
-               box[0, 0]: top y
-               box[0, 1]: bottom y
-               box[1, 0]: left x
-               box[1, 1]: right x
+    Box  -  bounding box, 2 x 2
+              Box[0, 0]: top y
+              Box[0, 1]: left x
+              Box[1, 0]: bottom y
+              Box[1, 1]: right x
+    cl   -  color, {'r'} | ...
 
   Output
     ha   -  box handle
   """
   # bounding box
-  xHd = box[1, 0]
-  xEd = box[1, 1]
-  yHd = box[0, 0]
-  yEd = box[0, 1]
+  yHd = Box[0, 0]
+  xHd = Box[0, 1]
+  yEd = Box[1, 0]
+  xEd = Box[1, 1]
 
-  ha = plt.plot([xHd, xEd, xEd, xHd, xHd], [yHd, yHd, yEd, yEd, yHd], '-r')
+  ha = plt.plot([xHd, xEd, xEd, xHd, xHd], [yHd, yHd, yEd, yEd, yHd], '-', color=cl)
 
   return ha

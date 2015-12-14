@@ -17,6 +17,7 @@ from match import *
 from str import *
 from dct import *
 from dst import *
+from tran import *
 
 def init(prL=2, isOut=False):
   """
