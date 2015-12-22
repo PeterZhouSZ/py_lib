@@ -1,11 +1,13 @@
+#!/usr/bin/env python
 """
 Distance-related functions.
 
 History
-  create  -  Feng Zhou (zhfe99@gmail.com), 02-18-2015
+  create  -  Feng Zhou (zhfe99@gmail.com), 2015-02
   modify  -  Feng Zhou (zhfe99@gmail.com), 2015-12
 """
 import numpy as np
+
 
 def conDst(X1, X2, dst='e'):
   """
@@ -52,6 +54,7 @@ def conDst(X1, X2, dst='e'):
     raise Exception('unknown distance: {}'.format(dst));
 
   return D
+
 
 def conDstB(X1, X2):
   """

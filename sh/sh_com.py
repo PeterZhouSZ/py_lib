@@ -124,11 +124,17 @@ def setAx(ax):
     fig.sca(ax)
 
 
-def show():
+def show(block=None):
   """
   A wrapper of plt.show()
+
+  Input
+    block  -  {None} | False | True
+              None: equivalent to False
   """
-  plt.show(block=False)
+  if block is None:
+    block = False
+  plt.show(block=block)
 
 
 def setTick(xy, labs, ori='hor', siz=0):

@@ -1,9 +1,10 @@
+#!/usr/bin/env python
 """
 Image utility functions.
 
 History
   create  -  Feng Zhou (zhfe99@gmail.com), 2015-03
-  modify  -  Feng Zhou (zhfe99@gmail.com), 2015-09
+  modify  -  Feng Zhou (zhfe99@gmail.com), 2015-12
 """
 from pri import pr
 from cell import cells
@@ -75,13 +76,13 @@ def imgIplCrop(imgPath0, imgPath, target_h=120, target_w=90):
   xmax = w
   ymax = h
   if w / target_w > h / target_h:
-      new_w = 90 * h / 120
-      xmin = (w - new_w) / 2
-      xmax = xmin + new_w
+    new_w = 90 * h / 120
+    xmin = (w - new_w) / 2
+    xmax = xmin + new_w
   else:
-      new_h = 120 * w / 90
-      ymin = (h - new_h) / 2
-      ymax = ymin + new_h
+    new_h = 120 * w / 90
+    ymin = (h - new_h) / 2
+    ymax = ymin + new_h
   size = target_w, target_h
   bbox = (xmin, ymin, xmax, ymax)
   img = img.crop(bbox)
@@ -90,46 +91,46 @@ def imgIplCrop(imgPath0, imgPath, target_h=120, target_w=90):
 
 
 def imgCropSca(img0, h=120, w=90):
-    """
-    Crop an image patch within a bounding box.
+  """
+  Crop an image patch within a bounding box.
 
-    Input
-      img0  -  image, h0 x w0 x 3
-      h     -  height, {120} | ...
-      w     -  width, {90} | ...
+  Input
+    img0  -  image, h0 x w0 x 3
+    h     -  height, {120} | ...
+    w     -  width, {90} | ...
 
-    Output
-      img   -  cropped image, h x w x 3
-    """
-    # dimension
-    h0, w0, nChan = img0.shape
+  Output
+    img   -  cropped image, h x w x 3
+  """
+  # dimension
+  h0, w0, nChan = img0.shape
 
-    # get the bounding box
-    if 1.0 * w0 / h0 > 1.0 * w / h:
-        # crop w
-        h1 = h0
-        w1 = int(1.0 * w * h1 / h)
-        xMi = (w0 - w1) / 2
-        xMa = xMi + w1 - 1
-        yMi = 0
-        yMa = h0 - 1
-    else:
-        # crop h
-        w1 = w0
-        h1 = int(1.0 * h * w1 / w)
-        yMi = (h0 - h1) / 2
-        yMa = yMi + h1 - 1
-        xMi = 0
-        xMa = w0 - 1
+  # get the bounding box
+  if 1.0 * w0 / h0 > 1.0 * w / h:
+    # crop w
+    h1 = h0
+    w1 = int(1.0 * w * h1 / h)
+    xMi = (w0 - w1) / 2
+    xMa = xMi + w1 - 1
+    yMi = 0
+    yMa = h0 - 1
+  else:
+    # crop h
+    w1 = w0
+    h1 = int(1.0 * h * w1 / w)
+    yMi = (h0 - h1) / 2
+    yMa = yMi + h1 - 1
+    xMi = 0
+    xMa = w0 - 1
 
-    # crop
-    box = [[yMi, yMa], [xMi, xMa]]
-    img = imgCrop(img0, np.array(box), isOkOut=True)
+  # crop
+  box = [[yMi, yMa], [xMi, xMa]]
+  img = imgCrop(img0, np.array(box), isOkOut=True)
 
-    # scale
-    img = imgSizNew(img, [h, w])
+  # scale
+  img = imgSizNew(img, [h, w])
 
-    return img
+  return img
 
 
 def imgMeans(Img):
@@ -203,112 +204,112 @@ def imgSizNew(img0, siz, order=1):
   """
   siz0 = img0.shape
   if siz0[-1] == 1 or siz0[-1] == 3:
-      from skimage.transform import resize
+    from skimage.transform import resize
 
-      # skimage is fast but only understands {1,3} channel images in [0, 1].
-      im_min, im_max = img0.min(), img0.max()
-      im_std = (img0 - im_min) / (im_max - im_min)
-      resized_std = resize(im_std, siz, order=order)
-      resized_im = resized_std * (im_max - im_min) + im_min
+    # skimage is fast but only understands {1,3} channel images in [0, 1].
+    im_min, im_max = img0.min(), img0.max()
+    im_std = (img0 - im_min) / (im_max - im_min)
+    resized_std = resize(im_std, siz, order=order)
+    resized_im = resized_std * (im_max - im_min) + im_min
 
   else:
-      from scipy.ndimage import zoom
+    from scipy.ndimage import zoom
 
-      # ndimage interpolates anything but more slowly.
-      scale = tuple(np.array(siz) / np.array(img0.shape[:2]))
-      resized_im = zoom(img0, scale + (1,), order=order)
+    # ndimage interpolates anything but more slowly.
+    scale = tuple(np.array(siz) / np.array(img0.shape[:2]))
+    resized_im = zoom(img0, scale + (1,), order=order)
 
   return resized_im.astype(np.float32)
 
 
 def imgSizEqW(siz0, w):
-    """
-    Adjust the image size to fit with the width.
+  """
+  Adjust the image size to fit with the width.
 
-    Input
-      siz0   -  original size, 2 x | 3 x
-      w      -  width
+  Input
+    siz0   -  original size, 2 x | 3 x
+    w      -  width
 
-    Output
-      siz    -  new size, 2 x | 3 x
-    """
-    # original size
-    h0 = siz0[0]
-    w0 = siz0[1]
+  Output
+    siz    -  new size, 2 x | 3 x
+  """
+  # original size
+  h0 = siz0[0]
+  w0 = siz0[1]
 
-    # adjust height
-    sca = 1.0 * h0 / w0
-    w = w
-    h = int(round(sca * w))
+  # adjust height
+  sca = 1.0 * h0 / w0
+  w = w
+  h = int(round(sca * w))
 
-    # store
-    if len(siz0) == 2:
-        siz = [h, w]
-    elif len(siz0) == 3:
-        siz = [h, w, siz0[2]]
-    else:
-        raise Exception('unsupported dim: {}'.format(siz0.shape))
+  # store
+  if len(siz0) == 2:
+    siz = [h, w]
+  elif len(siz0) == 3:
+    siz = [h, w, siz0[2]]
+  else:
+    raise Exception('unsupported dim: {}'.format(siz0.shape))
 
-    return siz
+  return siz
 
 
 def imgSizFit(siz0, sizMa):
-    """
-    Adjust the image size to fit with the maximum size constraint
-    but keeping the ratio.
+  """
+  Adjust the image size to fit with the maximum size constraint
+  but keeping the ratio.
 
-    Input
-      siz0   -  original size, 2 x | 3 x
-      sizMa  -  maximum size, 2 x
+  Input
+    siz0   -  original size, 2 x | 3 x
+    sizMa  -  maximum size, 2 x
 
-    Output
-      siz    -  new size, 2 x | 3 x
-      rat    -  ratio
-    """
-    # original size
-    h0 = siz0[0]
-    w0 = siz0[1]
+  Output
+    siz    -  new size, 2 x | 3 x
+    rat    -  ratio
+  """
+  # original size
+  h0 = siz0[0]
+  w0 = siz0[1]
 
-    # maximum size
-    hMa = sizMa[0]
-    wMa = sizMa[1]
+  # maximum size
+  hMa = sizMa[0]
+  wMa = sizMa[1]
 
-    # error
-    if hMa == 0 and wMa == 0:
-        siz = siz0
-        rat = 1
-        return siz, rat
-
-    # fit already
-    if h0 <= hMa and w0 <= wMa:
-        siz = siz0
-        rat = 1
-        return siz, rat
-
-    # adjust height
-    if h0 > hMa:
-        sca = 1.0 * w0 / h0
-        h0 = hMa
-        w0 = int(round(sca * h0))
-
-    # adjust width
-    if w0 > wMa:
-        sca = 1.0 * h0 / w0
-        w0 = wMa
-        h0 = int(round(sca * w0))
-
-    # ratio
-    rat = np.mean(1.0 * np.array([h0, w0]) / np.array(siz0[:2]))
-
-    # store
-    if len(siz0) == 2:
-        siz = [h0, w0]
-    elif len(siz0) == 3:
-        siz = [h0, w0, siz0[2]]
-    else:
-        raise Exception('unsupported dim: {}'.format(siz0.shape))
-
+  # error
+  if hMa == 0 and wMa == 0:
+    siz = siz0
+    rat = 1
     return siz, rat
+
+  # fit already
+  if h0 <= hMa and w0 <= wMa:
+    siz = siz0
+    rat = 1
+    return siz, rat
+
+  # adjust height
+  if h0 > hMa:
+    sca = 1.0 * w0 / h0
+    h0 = hMa
+    w0 = int(round(sca * h0))
+
+  # adjust width
+  if w0 > wMa:
+    sca = 1.0 * h0 / w0
+    w0 = wMa
+    h0 = int(round(sca * w0))
+
+  # ratio
+  rat = np.mean(1.0 * np.array([h0, w0]) / np.array(siz0[:2]))
+
+  # store
+  if len(siz0) == 2:
+    siz = [h0, w0]
+  elif len(siz0) == 3:
+    siz = [h0, w0, siz0[2]]
+  else:
+    raise Exception('unsupported dim: {}'.format(siz0.shape))
+
+  return siz, rat
 
 
 def imgSv(imgPath, img):
@@ -317,7 +318,7 @@ def imgSv(imgPath, img):
 
   Input
     imgPath  -  image path
-    img      -  an image with type np.float32 in range [0, 1], H x W x nChan
+    img      -  an image with type np.float32 in range [0, 1], h x w x nChan
   """
   skimage.io.imsave(imgPath, img)
 
@@ -333,93 +334,93 @@ def imgLoad(imgPath, color=True):
 
   Output
     image    -  an image with type np.float32 in range [0, 1]
-                  of size (H x W x 3) in RGB or
-                  of size (H x W x 1) in grayscale.
+                  of size (h x w x 3) in RGB or
+                  of size (h x w x 1) in grayscale.
   """
   # load
   try:
-      img0 = skimage.io.imread(imgPath)
-      img = skimage.img_as_float(img0).astype(np.float32)
+    img0 = skimage.io.imread(imgPath)
+    img = skimage.img_as_float(img0).astype(np.float32)
 
   except:
-      pr('unable to open img: {}'.format(imgPath))
-      return None
+    pr('unable to open img: {}'.format(imgPath))
+    return None
 
   # color channel
   if img.ndim == 2:
-      img = img[:, :, np.newaxis]
-      if color:
-          img = np.tile(img, (1, 1, 3))
+    img = img[:, :, np.newaxis]
+    if color:
+      img = np.tile(img, (1, 1, 3))
 
   elif img.shape[2] == 4:
-      img = img[:, :, :3]
+    img = img[:, :, :3]
 
   return img
 
 
 def imgLoadTxt(txtPaths):
-    """
-    Load image from txt file.
+  """
+  Load image from txt file.
 
-    Input
-      txtPaths  -  txt path, 3 x
+  Input
+    txtPaths  -  txt path, 3 x
 
-    Output
-      img       -  image, h x w x 3
-    """
-    # dimension
-    d = len(txtPaths)
+  Output
+    img       -  image, h x w x 3
+  """
+  # dimension
+  d = len(txtPaths)
 
-    # load matrix
-    As = []
-    for i in range(d):
-        A = np.loadtxt(txtPaths[i])
-        if i == 0:
-          h = A.shape[0]
-          w = A.shape[1]
-        else:
-          assert A.shape[0] == h and A.shape[1] == w
-        As.append(A)
+  # load matrix
+  As = []
+  for i in range(d):
+    A = np.loadtxt(txtPaths[i])
+    if i == 0:
+      h = A.shape[0]
+      w = A.shape[1]
+    else:
+      assert A.shape[0] == h and A.shape[1] == w
+    As.append(A)
 
-    # merge
-    img = np.zeros((h, w, d))
-    for i in range(d):
-        img[:, :, i] = As[i]
-    img = img / 255
+  # merge
+  img = np.zeros((h, w, d))
+  for i in range(d):
+    img[:, :, i] = As[i]
+  img = img / 255
 
-    return img
+  return img
 
 
 def imgSaveTxt(img, txtPaths, fmt='%.2f'):
-    """
-    Save image to txt files.
+  """
+  Save image to txt files.
 
-    Input
-      img       -  image, 3 x h x w
-      txtPaths  -  txt path, 3 x
-      fmt       -  format
-    """
-    # dimension
-    d = len(txtPaths)
+  Input
+    img       -  image, 3 x h x w
+    txtPaths  -  txt path, 3 x
+    fmt       -  format
+  """
+  # dimension
+  d = len(txtPaths)
 
-    # load matrix
-    for i in range(d):
-        np.savetxt(txtPaths[i], img[i], fmt)
+  # load matrix
+  for i in range(d):
+    np.savetxt(txtPaths[i], img[i], fmt)
 
 def imgLoadPil(imgPath):
-    """
-    Load an image using PIL.
+  """
+  Load an image using PIL.
 
-    Input
-      imgPath  -  image path
+  Input
+    imgPath  -  image path
 
-    Output
-      image    -  image in PIL format
-    """
-    # load
-    from PIL import Image
-    img = Image.open(imgPath)
-    return img
+  Output
+    image    -  image in PIL format
+  """
+  # load
+  from PIL import Image
+  img = Image.open(imgPath)
+  return img
 
 def imgLoadCv(imgPath):
   """
@@ -482,7 +483,7 @@ def imgPil2Ipl(img0):
   import cv2
 
   if not isinstance(img0, PIL.Image.Image):
-      raise TypeError, 'must be called with PIL.Image.Image!'
+    raise TypeError, 'must be called with PIL.Image.Image!'
 
   # dimension
   size = (img0.size[0], img0.size[1])
@@ -490,11 +491,11 @@ def imgPil2Ipl(img0):
   # mode dictionary:
   # (pil_mode : (ipl_depth, ipl_channels, color model, channel Seq)
   mode_list = {
-      "RGB" : (cv2.cv.IPL_DEPTH_8U, 3),
-      "L"   : (cv2.cv.IPL_DEPTH_8U, 1),
-      "F"   : (cv2.cv.IPL_DEPTH_32F, 1)}
+    "RGB" : (cv2.cv.IPL_DEPTH_8U, 3),
+    "L"   : (cv2.cv.IPL_DEPTH_8U, 1),
+    "F"   : (cv2.cv.IPL_DEPTH_32F, 1)}
   if not mode_list.has_key(img0.mode):
-      raise ValueError, 'unknown or unsupported input mode'
+    raise ValueError, 'unknown or unsupported input mode'
   modes = mode_list[img0.mode]
 
   result = cv2.cv.CreateImageHeader(size, modes[0], modes[1])
@@ -602,3 +603,55 @@ def imgDate(imgPath):
     imgDat = time.strftime("%Y-%m-%d", time.gmtime(imgDate0))
 
   return imgDat
+
+
+def imgDistort(img0, sca=1.5, rotMa=0, randSca=False):
+  """
+  Distort an input image.
+
+  Input
+    img0   -  input img, h0 x w0 x nC
+    sca    -  scaling factor, {1.5} | 2 | ...
+                new image dimension would be
+                h = int(h0 * sca)
+                w = int(w0 * sca)
+    rotMa  -  maximum random rotation, {0} | 30 | 180 | 360 | ...
+
+  Output
+    img    -  new img, h x w x nC
+  """
+  # dimension
+  h0, w0, nC = img0.shape
+  h = int(h0 * sca)
+  w = int(w0 * sca)
+
+  # random rotation
+  from skimage import transform
+  ang = int(np.random.rand(1) * rotMa)
+  shift_y, shift_x = np.array([h0, w0]) / 2.
+  rot = transform.SimilarityTransform(rotation=np.deg2rad(ang))
+  tf_shift = transform.SimilarityTransform(translation=[-shift_x, -shift_y])
+  tf_shift_inv = transform.SimilarityTransform(translation=[shift_x, shift_y])
+  img1 = transform.warp(img0, (tf_shift + (rot + tf_shift_inv)).inverse)
+
+  # random translate
+  img = np.zeros((h, w, nC), dtype=img0.dtype)
+  hD = int(np.random.rand(1) * (h - h0))
+  wD = int(np.random.rand(1) * (w - w0))
+  img[hD : hD + h0, wD : wD + w0, :] = img1
+
+  # debug
+  if False:
+    import py_lib.sh as lib
+    cols = 3
+    Ax = lib.iniAx(1, 1, cols, [5, 5 * cols])
+    lib.shImg(img0, ax=Ax[0])
+    lib.shImg(img1, ax=Ax[1])
+    lib.shImg(img, ax=Ax[2])
+    lib.show()
+    import pdb; pdb.set_trace()
+
+  return img
+
+
+# main run
