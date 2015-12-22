@@ -99,6 +99,7 @@ def prIn(nm, form="", *args):
   # self add
   lPr = lPr + 1
 
+
 def prOut():
   """
   Stop a propmter for function.
@@ -108,6 +109,7 @@ def prOut():
 
   # delete
   lPr = lPr - 1
+
 
 def prInOut(nm, form="", *args):
   """
@@ -119,6 +121,7 @@ def prInOut(nm, form="", *args):
   """
   prIn(nm, form=form, *args)
   prOut()
+
 
 def prCIn(nm, nRep, sca):
   """
@@ -150,6 +153,7 @@ def prCIn(nm, nRep, sca):
 
   lPr = lPr + 1
 
+
 def prCOut(nRep):
   """
   Stop a propmter for counting.
@@ -167,6 +171,7 @@ def prCOut(nRep):
 
   # print
   pr('%s: %d iters, %.2f secs' %(nmPrs[lPr], nRep, t))
+
 
 def prC(iRep):
   """
@@ -190,6 +195,7 @@ def prC(iRep):
     ticPrs[lPr] = tic()
 
   lPr = lPr + 1
+
 
 def logSet(logPath, level='info', reNew=True, recDate=True, recLevel=True, haNew=False):
   """
@@ -235,6 +241,7 @@ def logSet(logPath, level='info', reNew=True, recDate=True, recLevel=True, haNew
   logging.basicConfig(level=level, filename=logPath,
                       format=format,
                       datefmt="%Y-%m-%d %H:%M:%S")
+
 
 def log(form, level='info', *args):
   """

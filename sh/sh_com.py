@@ -10,12 +10,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def shIni(isOut=False):
+def shIni(isOut=False, isTool=True):
   """
   Init figure setting.
 
   Input
-    isOut  -  output mode, True | {False}
+    isOut   -  output mode, True | {False}
+    isTool  -  visualize tool bar, {True} | False
   """
   plt.close('all')
   plt.rcParams['figure.figsize'] = (10, 10)
@@ -23,6 +24,7 @@ def shIni(isOut=False):
   plt.rcParams['image.interpolation'] = 'nearest'
   plt.rcParams['image.cmap'] = 'gray'
 
+  # tex
   if isOut:
     plt.rcParams['text.usetex'] = True
     plt.rcParams['font.family'] = 'sans-serif'
@@ -30,8 +32,10 @@ def shIni(isOut=False):
   else:
     plt.rcParams['text.usetex'] = False
 
-    # import matplotlib as mpl
-    # mpl.rcParams['toolbar'] = 'None'
+  # hide toolbar
+  if not isTool:
+    import matplotlib as mpl
+    mpl.rcParams['toolbar'] = 'None'
 
 
 def iniAx(fig, rows, cols, siz=None, wGap=.2, hGap=.2,

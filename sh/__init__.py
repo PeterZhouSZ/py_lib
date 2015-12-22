@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Init py_lib.sh modules.
+Init visualization modules in py_lib.
 
 History
   create  -  Feng Zhou (zhfe99@gmail.com), 2015-09
