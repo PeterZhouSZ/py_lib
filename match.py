@@ -81,6 +81,7 @@ def listFiles(dirNm, isRec, subxs):
 
   return (relDirs, fileNms)
 
+
 def checkFoldMatch(srcDir, dstDir, logFile1, logFile2, isRec, subxs):
   # check subfold match
 

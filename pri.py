@@ -21,6 +21,7 @@ ticPr0s = None
 nRepPrs = None
 scaPrs = None
 
+
 def prSet(lMa, logPath=None):
   """
   Set the promption level.
@@ -45,8 +46,9 @@ def prSet(lMa, logPath=None):
 
   # log
   if logPath is not None:
-      logFile = logPath
-      logSet(logPath, haNew=True)
+    logFile = logPath
+    logSet(logPath, haNew=True)
+
 
 def pr(form, *args):
   """
@@ -70,6 +72,7 @@ def pr(form, *args):
       print form % args
       if logFile is not None:
         logging.info(form % args)
+
 
 def prIn(nm, form="", *args):
   """
@@ -177,14 +180,14 @@ def prC(iRep):
 
   lPr = lPr - 1
   if (iRep != 0 and iRep % scaPrs[lPr] == 0) or (iRep == nRepPrs[lPr]):
-      # time
-      t = toc(ticPrs[lPr])
+    # time
+    t = toc(ticPrs[lPr])
 
-      # print
-      pr('%s: %d/%d, %.2f secs' %(nmPrs[lPr], iRep, nRepPrs[lPr], t))
+    # print
+    pr('%s: %d/%d, %.2f secs' %(nmPrs[lPr], iRep, nRepPrs[lPr], t))
 
-      # re-start a timer
-      ticPrs[lPr] = tic()
+    # re-start a timer
+    ticPrs[lPr] = tic()
 
   lPr = lPr + 1
 
@@ -200,38 +203,38 @@ def logSet(logPath, level='info', reNew=True, recDate=True, recLevel=True, haNew
     recLevel  -  flag of recording time, {True} | False
     haNew     -  flag of creating all new handler, True | {False}
   """
-  import io
+  import py_lib.fio as fio
 
   # create the log folder if necessary
   logFold = os.path.dirname(logPath)
-  io.mkDir(logFold)
+  fio.mkDir(logFold)
 
   # delete old log
   if reNew:
-      io.rmFile(logPath)
+    fio.rmFile(logPath)
 
   # remove onld handler
   logger = logging.getLogger()
   for handler in logger.handlers[:]:
-      logger.removeHandler(handler)
+    logger.removeHandler(handler)
 
   # level
   if level == 'info':
-      level = logging.INFO
+    level = logging.INFO
   else:
-      raise Exception('unknown level: {}'.format(level))
+    raise Exception('unknown level: {}'.format(level))
 
   # format
   format = '%(message)s'
   if recLevel:
-      format = '%(levelname)s; ' + format
+    format = '%(levelname)s; ' + format
   if recDate:
-      format = '%(asctime)s; ' + format
+    format = '%(asctime)s; ' + format
 
   # set
   logging.basicConfig(level=level, filename=logPath,
-                        format=format,
-                        datefmt="%Y-%m-%d %H:%M:%S")
+                      format=format,
+                      datefmt="%Y-%m-%d %H:%M:%S")
 
 def log(form, level='info', *args):
   """

@@ -33,11 +33,11 @@ def strLstPat(lst0, pats):
   Return a sub-list of string that match with the specified pattern.
 
   Input
-    lst0  -  original string list, 1 x n0
+    lst0  -  original string list, n0 x
     pats  -  pattern list, m x
 
   Output
-    lst   -  new string list, 1 x n
+    lst   -  new string list, n x
   """
   lst = []
   for str0 in lst0:

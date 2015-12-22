@@ -13,7 +13,7 @@ def dctSub(dct0, keys):
 
   Input
     dct0  -  original dictionary
-    keys  -  key list, 1 x m
+    keys  -  key list, m x
 
   Output
     dct   -  new dictionary
