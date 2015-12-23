@@ -1,17 +1,18 @@
+#!/usr/bin/env python
 """
 Other utility functions.
 
 History
-  create  -  Feng Zhou (zhfe99@gmail.com), 03-19-2015
+  create  -  Feng Zhou (zhfe99@gmail.com), 2015-03
   modify  -  Feng Zhou (zhfe99@gmail.com), 2015-12
 """
 import sys
 import time
 import math
 import random
-import pri
 from collections import OrderedDict
 import numpy as np
+
 
 def ismac():
   """
@@ -22,6 +23,7 @@ def ismac():
   """
   return sys.platform == 'darwin'
 
+
 def islinux():
   """
   Check whether it is on a Linux system.
@@ -31,6 +33,7 @@ def islinux():
   """
   return sys.platform.startswith('linux')
 
+
 def quit():
   """
   Quit if is not mac.
@@ -38,12 +41,14 @@ def quit():
   if not ismac():
     sys.exit()
 
+
 def tic():
   """
   Mimick Matlab's tic function
   """
   ti = time.time()
   return ti
+
 
 def toc(ti0):
   """
@@ -57,6 +62,7 @@ def toc(ti0):
   """
   ti = time.time()
   return ti - ti0
+
 
 def vec2img(vec):
   """
@@ -73,6 +79,7 @@ def vec2img(vec):
   size = int(math.sqrt(pixels))
   Img = vec.reshape((3, size, size)).swapaxes(0, 2).swapaxes(0, 1)
   return Img
+
 
 def fact(n):
   """
@@ -94,6 +101,7 @@ def fact(n):
 
   return factors
 
+
 def equal(nm, A, B):
   """
   Check whether two matrix are equal or not.
@@ -105,11 +113,12 @@ def equal(nm, A, B):
 
   Output
     isEq  -  result, True | False
+    msg   -  message
   """
   # check type
   if not A.__class__ == B.__class__:
-    pri.pr('{}, different types: {} vs {}'.format(nm, A.__class__, B.__class__))
-    return False
+    msg = '{}, different types: {} vs {}'.format(nm, A.__class__, B.__class__)
+    return False, msg
 
   # dictionary, check each key
   if A.__class__ == dict:
@@ -118,44 +127,45 @@ def equal(nm, A, B):
     keyAs.sort()
     keyBs.sort()
     if not equal(nm, keyAs, keyBs):
-      return False
+      return False, None
     for key in keyAs:
       if not equal(nm, A[key], B[key]):
-        return False
-    return True
+        return False, None
+    return True, None
 
   # list
   if A.__class__ == list:
     if not len(A) == len(B):
-      pri.pr('{}, different lens: {} vs {}'.format(nm, len(A), len(B)))
-      return False
+      msg = '{}, different lens: {} vs {}'.format(nm, len(A), len(B))
+      return False, msg
 
     for i in range(len(A)):
       if not equal(nm, A[i], B[i]):
-        return False
-    return True
+        return False, None
+    return True, None
 
   # string
   if A.__class__ == str:
     if not A == B:
-      pri.pr('{}, different strings: {} vs {}'.format(nm, A, B))
-      return False
-    return True
+      msg = '{}, different strings: {} vs {}'.format(nm, A, B)
+      return False, msg
+    return True, None
 
   # check dimension
   if not A.shape == B.shape:
-    pri.pr('{}, different size: {} vs {}'.format(nm, A.shape, B.shape))
-    return False
+    msg = '{}, different size: {} vs {}'.format(nm, A.shape, B.shape)
+    return False, msg
 
   # check value
   diff = max(abs((A - B).flatten()))
   isEq = diff < 1e-5
   if isEq:
-    pri.pr('{}, same'.format(nm))
+    msg = '{}, same'.format(nm)
   else:
-    pri.pr('{}, different values: diff = {}'.format(nm, diff))
+    msg = '{}, different values: diff = {}'.format(nm, diff)
 
-  return isEq
+  return isEq, msg
+
 
 def listElems(list0, idx):
   """
@@ -171,6 +181,7 @@ def listElems(list0, idx):
 
   list = [list0[id] for id in idx]
   return list
+
 
 def dictMerge(dict1, dict2):
   """
@@ -189,14 +200,18 @@ def dictMerge(dict1, dict2):
 
   return dict
 
+
 def randIdx(n, m, isR=True):
   """
   Randomly select m from 0 : n.
 
+  Note:
+    Slow if n is big. Use randInt instead.
+
   Input
     n    -  #total number
     m    -  #selected
-    isR  -  randomly shuffle or not, True | {False}
+    isR  -  randomly shuffle or not, {True} | False
 
   Output
     idx  -  index, m x
@@ -204,8 +219,29 @@ def randIdx(n, m, isR=True):
   random.seed()
   idx = range(0, n)
   if isR:
-      random.shuffle(idx)
+    random.shuffle(idx)
   return idx[:m]
+
+
+def randInt(mi, ma, m):
+  """
+  Randomly select m integer from mi : ma.
+
+  Input
+    mi   -  minimum integer
+    ma   -  maximum integer
+    m    -  #selected
+
+  Output
+    res  -  result, m x
+  """
+  random.seed()
+  res = []
+  for i in range(m):
+    a = random.randint(mi, ma)
+    res.append(a)
+  return res
+
 
 def randp(n):
   """
@@ -218,6 +254,7 @@ def randp(n):
     idx  -  index array, 1 x n
   """
   return randIdx(n, n)
+
 
 def rangeG(n, m):
   """
@@ -241,6 +278,7 @@ def rangeG(n, m):
     rans[iG] = range(st[iG], st[iG + 1])
 
   return rans
+
 
 def splitLst2(lst, rat, isR=True):
   """
@@ -274,6 +312,7 @@ def splitLst2(lst, rat, isR=True):
 
   return lst1, lst2
 
+
 def lstUni(lst0):
   """
   Return a unique list.
@@ -304,6 +343,7 @@ def lstUni(lst0):
     k += 1
 
   return lst, c0s, idx, dct
+
 
 def mapSort(dct0, alg):
   """
@@ -343,6 +383,7 @@ def mapSort(dct0, alg):
     dct[key0s[id]] = val0s[id]
   return dct
 
+
 def lstNm2Id(lst0, nms):
   """
   Convert the values of list to id.
@@ -360,6 +401,7 @@ def lstNm2Id(lst0, nms):
   lst = [nm2id[nm] for nm in lst0]
 
   return lst
+
 
 def mapCo(dct):
   """
@@ -387,6 +429,7 @@ def mapCo(dct):
 
   return coMap
 
+
 def mapValNm2Id(dct0, nms):
   """
   Convert the values of map to id.
@@ -408,6 +451,7 @@ def mapValNm2Id(dct0, nms):
 
   return dct
 
+
 def mapValLstNm2Id(dct0, nms):
   """
   Convert the values of map to id.
@@ -428,6 +472,7 @@ def mapValLstNm2Id(dct0, nms):
     dct[key] = [nm2id[val] for val in vals]
 
   return dct
+
 
 def objBaseTree(obj):
   """

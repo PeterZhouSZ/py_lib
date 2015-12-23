@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-IO utility functions.
+File IO utility functions.
 
 History
   create  -  Feng Zhou (zhfe99@gmail.com), 2015-03
@@ -251,16 +251,16 @@ def listFold(fold):
   foldPaths = []
 
   for foldNm in os.listdir(fold):
-      # fold absolute path
-      foldPath = os.path.join(fold, foldNm)
+    # fold absolute path
+    foldPath = os.path.join(fold, foldNm)
 
-      # skip non fold
-      if not os.path.isdir(foldPath):
-          continue
+    # skip non fold
+    if not os.path.isdir(foldPath):
+      continue
 
-      # store
-      foldNms.append(foldNm)
-      foldPaths.append(foldPath)
+    # store
+    foldNms.append(foldNm)
+    foldPaths.append(foldPath)
 
   return foldNms, foldPaths
 
@@ -281,13 +281,13 @@ def listFoldR(fold):
 
   # each sub file
   for dirname, dirNms, fileNms in os.walk(fold):
-      for dirNm in dirNms:
-          # file and cmd path
-          foldPath = os.path.join(dirname, dirNm)
+    for dirNm in dirNms:
+      # file and cmd path
+      foldPath = os.path.join(dirname, dirNm)
 
-          # store
-          foldNms.append(dirNm)
-          foldPaths.append(foldPath)
+      # store
+      foldNms.append(dirNm)
+      foldPaths.append(foldPath)
 
   return foldNms, foldPaths
 
@@ -308,20 +308,20 @@ def listFile(fold, subx=None):
   filePaths = []
 
   for foldNm in os.listdir(fold):
-      # fold absolute path
-      filePath = os.path.join(fold, foldNm)
+    # fold absolute path
+    filePath = os.path.join(fold, foldNm)
 
-      # skip non fold
-      if os.path.isdir(filePath):
-          continue
+    # skip non fold
+    if os.path.isdir(filePath):
+      continue
 
-      # skip filepath
-      if subx is not None and not filePath.endswith(subx):
-          continue
+    # skip filepath
+    if subx is not None and not filePath.endswith(subx):
+      continue
 
-      # store
-      fileNms.append(foldNm)
-      filePaths.append(filePath)
+    # store
+    fileNms.append(foldNm)
+    filePaths.append(filePath)
 
   return fileNms, filePaths
 
@@ -344,23 +344,23 @@ def listFileR(fold, subxs=None):
 
     # each sub file
     for dirname, dirnames, fileNm0s in os.walk(fold, followlinks=True):
-        for fileNm in fileNm0s:
-            # skip filepath if not matched
-            if subxs is not None:
-              ok = False
-              for subx in subxs:
-                if fileNm.endswith(subx):
-                  ok = True
-                  break
-              if not ok:
-                continue
+      for fileNm in fileNm0s:
+        # skip filepath if not matched
+        if subxs is not None:
+          ok = False
+          for subx in subxs:
+            if fileNm.endswith(subx):
+              ok = True
+              break
+          if not ok:
+            continue
 
-            # file and cmd path
-            filePath = os.path.join(dirname, fileNm)
+        # file and cmd path
+        filePath = os.path.join(dirname, fileNm)
 
-            # store
-            fileNms.append(dirname)
-            filePaths.append(filePath)
+        # store
+        fileNms.append(dirname)
+        filePaths.append(filePath)
 
     return fileNms, filePaths
 
@@ -461,10 +461,10 @@ def lmdbR(ha):
   """
   # move cursor
   if ha['co'] == 0:
-      ha['cur'].first()
+    ha['cur'].first()
   else:
-      if not ha['cur'].next():
-        return None, None, None
+    if not ha['cur'].next():
+      return None, None, None
   ha['co'] += 1
 
   # get key & value

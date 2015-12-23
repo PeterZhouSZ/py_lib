@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 """
-Image utility functions.
+Image-related functions.
 
 History
   create  -  Feng Zhou (zhfe99@gmail.com), 2015-03
   modify  -  Feng Zhou (zhfe99@gmail.com), 2015-12
 """
-from pri import pr
-from cell import cells
+from py_lib.pri import pr
+from py_lib.cell import cells
 import skimage.io
 import PIL
 import numpy as np
@@ -55,15 +55,10 @@ def imgCrop(img0, box, isOkOut=False):
 
 def imgIplCrop(imgPath0, imgPath, target_h=120, target_w=90):
   """
-  Crop an image patch within a bounding box.
+  Crop an image patch within a bounding box using IPL library.
 
   Input
     img0     -  image, h0 x w0 x 3
-    box      -  bounding box, 2 x 2
-                  box[0, 0]: top y
-                  box[0, 1]: bottom y
-                  box[1, 0]: left x
-                  box[1, 1]: right x
     isOkOut  -  flag of whether out boundary is OK, True | {False}
 
   Output
@@ -640,18 +635,38 @@ def imgDistort(img0, sca=1.5, rotMa=0, randSca=False):
   wD = int(np.random.rand(1) * (w - w0))
   img[hD : hD + h0, wD : wD + w0, :] = img1
 
-  # debug
-  if False:
-    import py_lib.sh as lib
-    cols = 3
-    Ax = lib.iniAx(1, 1, cols, [5, 5 * cols])
-    lib.shImg(img0, ax=Ax[0])
-    lib.shImg(img1, ax=Ax[1])
-    lib.shImg(img, ax=Ax[2])
-    lib.show()
-    import pdb; pdb.set_trace()
-
   return img
 
 
-# main run
+def imgMerge(img0s, alg='max'):
+  """
+  Merge multiple images of the same scale to a new image.
+
+  Input
+    img0s  -  input img, m x, h x w x nC
+    alg    -  pixel merge algorithm, {'max'} | 'ave'
+                'max': pick the maximum pixel
+                'ave': compute the average pixel
+
+  Output
+    img    -  new img, h x w x nC
+  """
+  # dimension
+  m = len(img0s)
+  h, w, nC = img0s[0].shape
+
+  # put in a big matrix
+  Img0 = np.zeros((m, h, w, nC))
+  for i in range(m):
+    Img0[i] = img0s[i]
+
+  if alg == 'max':
+    img = Img0.max(axis=0)
+
+  elif alg == 'ave':
+    img = Img0.sum(axis=0) / m
+
+  else:
+    raise Exception('unknown alg: {}'.format(alg))
+
+  return img

@@ -9,7 +9,7 @@ History
 import os
 import sys
 import logging
-from util import tic, toc
+from py_lib.util import tic, toc
 
 # global variable
 logFile = None
