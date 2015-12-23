@@ -488,3 +488,29 @@ def objBaseTree(obj):
   tree = inspect.getclasstree(inspect.getmro(obj.__class__))
 
   return tree
+
+
+def appendConst2Array(a0, d, v=1):
+  """
+  Append a const value to an array.
+
+  Input
+    a0  -  original array, d0 x
+    d   -  new dimension
+    v   -  value, {1} | ...
+
+  Output
+    a   -  new array, d x
+  """
+  d0 = len(a0)
+  if d0 > d:
+    raise Exception('unknown case')
+
+  a = []
+  for i in range(d):
+    if i < d0:
+      a.append(a0[i])
+    else:
+      a.append(v)
+
+  return a
