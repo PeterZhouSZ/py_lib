@@ -53,7 +53,7 @@ def shImgs(imgs, axs, labs=None):
 
 def shSvFold(fold, prex, type='pdf'):
   """
-  Save image.
+  Save image to specified folder with specified prefix.
 
   Input
     fold  -  image fold

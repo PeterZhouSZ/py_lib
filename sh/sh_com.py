@@ -173,7 +173,7 @@ def shBox(box, cl='r'):
 
   Input
     box  -  box, 2 x 2
-    cl   -  color, {'r'} | 'b'
+    cl   -  line color, {'r'} | 'b'
   """
 
   xHd = box[1, 0]
@@ -192,8 +192,8 @@ def genMkCl(c=-1):
     c    -  index, {-1} | 0 | 1 | ...
 
   Output
-    mks  -  string | 1 x 12 (cell) (if c == -1)
-    cls  -  string | 1 x 12 (cell) (if c == -1)
+    mks  -  string | 12 x (if c == -1)
+    cls  -  string | 12 x (if c == -1)
   """
   mks = ['o', 's', '^', 'd', '+', '*', 'x', 'p', 'v', 'o', 's', '^', 'd'];
   cls = [[ 1,  0,  0], # 'r'

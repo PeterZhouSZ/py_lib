@@ -88,13 +88,13 @@ def prIn(nm, form="", *args):
 
   # init
   if not 'lPr' in globals():
-      prSet(3)
+    prSet(3)
 
   # print
   if form == "":
-      pr('%s', nm)
+    pr('%s', nm)
   else:
-      pr('%s: ' + form, nm, *args)
+    pr('%s: ' + form, nm, *args)
 
   # self add
   lPr = lPr + 1
@@ -143,9 +143,9 @@ def prCIn(nm, nRep, sca):
 
   # scaling
   if sca < 1:
-      sca = round(nRep * sca)
+    sca = round(nRep * sca)
   if sca == 0:
-      sca = 1
+    sca = 1
   scaPrs[lPr] = sca
 
   # print

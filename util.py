@@ -514,3 +514,31 @@ def appendConst2Array(a0, d, v=1):
       a.append(v)
 
   return a
+
+
+def maxGeneral(a, ma=0):
+  """
+  A general max function.
+  It can handle the case when input is empty.
+
+  Input
+    a   -  array, n x
+    ma  -  default maximum value, {0} | ...
+  """
+  if a is None or len(a) == 0:
+    return ma
+  return max(a)
+
+
+def minGeneral(a, mi=0):
+  """
+  A general min function.
+  It can handle the case when input is empty.
+
+  Input
+    a   -  array, n x
+    mi  -  default minimum value, {0} | ...
+  """
+  if a is None or len(a) == 0:
+    return mi
+  return min(a)
