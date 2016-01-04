@@ -625,7 +625,7 @@ def isEndSub(filename, subxs):
   Output
     res       -  result, True | False
   """
-  import regex as re
+  import re
 
   for subx in subxs:
     pat = ".*\." + subx + "$"
