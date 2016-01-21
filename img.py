@@ -4,7 +4,7 @@ Image-related functions.
 
 History
   create  -  Feng Zhou (zhfe99@gmail.com), 2015-03
-  modify  -  Feng Zhou (zhfe99@gmail.com), 2015-12
+  modify  -  Feng Zhou (zhfe99@gmail.com), 2016-01
 """
 from py_lib.pri import pr
 from py_lib.cell import cells
@@ -130,10 +130,12 @@ def imgCropSca(img0, h=120, w=90):
 
 def imgMeans(Img):
   """
-  Compute the mean image.
+  Compute different mean images for different groups of images.
 
   Input
     Img   -  a list of images, n x m, h x w x 3
+               n: #image in each group
+               m: #groups
 
   Output
     imgs  -  mean image, m (cell), h x w x 3
@@ -150,10 +152,14 @@ def imgMeans(Img):
 
 def imgMean(imgs):
   """
-  Compute the mean image.
+  Compute the mean image for a group of images.
+
+  Notice each image can have different dimensions.
+  The mean image takes the largest dimension on each side.
 
   Input
-    imgs  -  a list of images, n x, h x w x 3
+    imgs  -  a list of images, n x, hi x wi x 3
+               n: #image in the group
 
   Output
     img   -  mean image, h x w x 3
