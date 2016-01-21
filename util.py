@@ -4,7 +4,7 @@ Other utility functions.
 
 History
   create  -  Feng Zhou (zhfe99@gmail.com), 2015-03
-  modify  -  Feng Zhou (zhfe99@gmail.com), 2015-12
+  modify  -  Feng Zhou (zhfe99@gmail.com), 2016-01
 """
 import sys
 import time
@@ -260,12 +260,18 @@ def rangeG(n, m):
   """
   Get range groups.
 
+  Example
+    input:  n = 10, m = 3
+    call:   rans = rangeG(n, m)
+    output: rans = array([[0, 1, 2], [3, 4, 5], [6, 7, 8], [9]], dtype=object)
+
   Input
     n     -  #total number
     m     -  #group size
 
   Output
     rans  -  nG x, m x
+               nG: #group = ceil(n / m)
   """
   # dimension
   st = range(0, n, m)
