@@ -109,6 +109,7 @@ def imgCropSca(img0, h=120, w=90):
     xMa = xMi + w1 - 1
     yMi = 0
     yMa = h0 - 1
+
   else:
     # crop h
     w1 = w0
@@ -126,6 +127,74 @@ def imgCropSca(img0, h=120, w=90):
   img = imgSizNew(img, [h, w])
 
   return img
+
+
+def imgOversample(img0s, h=224, w=224, view='mul'):
+  """
+  Crop images as needed. Inspired by pycaffe.
+
+  Input
+    img0s  -  n0 x, h0 x w0 x k0
+    h      -  crop height, {224}
+    w      -  crop width, {224}
+    view   -  view, 'sin' | 'flip' | {'mul'}
+                'sin': center crop (m = 1)
+                'flip': center crop and its mirrored version (m = 2)
+                'mul': four corners, center, and their mirrored versions (m = 10)
+
+  Output
+    imgs   -  crops, (m n0) x h x w x k
+  """
+  # dimension
+  n0 = len(img0s)
+  im_shape = np.array(img0s[0].shape)
+  crop_dims = np.array([h, w])
+  im_center = im_shape[:2] / 2.0
+  h_indices = (0, im_shape[0] - crop_dims[0])
+  w_indices = (0, im_shape[1] - crop_dims[1])
+
+  # make crop coordinates
+  if view == 'sin':
+    # center crop
+    crops_ix = np.empty((1, 4), dtype=int)
+    crops_ix[0] = np.tile(im_center, (1, 2)) + np.concatenate([
+      -crop_dims / 2.0, crop_dims / 2.0
+    ])
+
+  elif view == 'flip':
+    # center crop + flip
+    crops_ix = np.empty((1, 4), dtype=int)
+    crops_ix[0] = np.tile(im_center, (1, 2)) + np.concatenate([
+      -crop_dims / 2.0, crop_dims / 2.0
+    ])
+    crops_ix = np.tile(crops_ix, (2, 1))
+
+  elif view == 'mul':
+    # multiple crop
+    crops_ix = np.empty((5, 4), dtype=int)
+    curr = 0
+    for i in h_indices:
+      for j in w_indices:
+        crops_ix[curr] = (i, j, i + crop_dims[0], j + crop_dims[1])
+        curr += 1
+    crops_ix = np.tile(crops_ix, (2, 1))
+  m = len(crops_ix)
+
+  # extract crops
+  crops = np.empty((m * n0, crop_dims[0], crop_dims[1],
+                    im_shape[-1]), dtype=np.float32)
+  ix = 0
+  for im in img0s:
+    for crop in crops_ix:
+      crops[ix] = im[crop[0] : crop[2], crop[1] : crop[3], :]
+      ix += 1
+
+    # flip for mirrors
+    if view == 'flip' or view == 'mul':
+      m2 = m / 2
+      crops[ix - m2 : ix] = crops[ix - m2 : ix, :, ::-1, :]
+
+  return crops
 
 
 def imgMeans(Img):
@@ -188,6 +257,40 @@ def imgMean(imgs):
 
   # average
   img /= n
+  return img
+
+
+def imgMerge(img0s, alg='max'):
+  """
+  Merge multiple images of the same scale to a new image.
+
+  Input
+    img0s  -  input img, m x, h x w x nC
+    alg    -  pixel merge algorithm, {'max'} | 'ave'
+                'max': pick the maximum pixel
+                'ave': compute the average pixel
+
+  Output
+    img    -  new img, h x w x nC
+  """
+  # dimension
+  m = len(img0s)
+  h, w, nC = img0s[0].shape
+
+  # put in a big matrix
+  Img0 = np.zeros((m, h, w, nC))
+  for i in range(m):
+    Img0[i] = img0s[i]
+
+  if alg == 'max':
+    img = Img0.max(axis=0)
+
+  elif alg == 'ave':
+    img = Img0.sum(axis=0) / m
+
+  else:
+    raise Exception('unknown alg: {}'.format(alg))
+
   return img
 
 
@@ -324,7 +427,7 @@ def imgSv(imgPath, img):
   skimage.io.imsave(imgPath, img)
 
 
-def imgLoad(imgPath, color=True):
+def imgLd(imgPath, color=True):
   """
   Load an image converting from grayscale or alpha as needed.
 
@@ -359,7 +462,7 @@ def imgLoad(imgPath, color=True):
   return img
 
 
-def imgLoadTxt(txtPaths):
+def imgLdTxt(txtPaths):
   """
   Load image from txt file.
 
@@ -392,7 +495,7 @@ def imgLoadTxt(txtPaths):
   return img
 
 
-def imgSaveTxt(img, txtPaths, fmt='%.2f'):
+def imgSvTxt(img, txtPaths, fmt='%.2f'):
   """
   Save image to txt files.
 
@@ -408,7 +511,8 @@ def imgSaveTxt(img, txtPaths, fmt='%.2f'):
   for i in range(d):
     np.savetxt(txtPaths[i], img[i], fmt)
 
-def imgLoadPil(imgPath):
+
+def imgLdPil(imgPath):
   """
   Load an image using PIL.
 
@@ -423,7 +527,8 @@ def imgLoadPil(imgPath):
   img = Image.open(imgPath)
   return img
 
-def imgLoadCv(imgPath):
+
+def imgLdCv(imgPath):
   """
   Load an image using OpenCV.
 
@@ -437,6 +542,7 @@ def imgLoadCv(imgPath):
   import cv2
   img = cv2.imread(imgPath)
   return img
+
 
 def imgPil2Ski(im):
   """
@@ -457,6 +563,7 @@ def imgPil2Ski(im):
 
   return im
 
+
 def imgPil2Cv(img0):
   """
   Convert image from PIL format to an Skimage one.
@@ -470,6 +577,7 @@ def imgPil2Cv(img0):
   data = np.array(img0.getdata())
   img = data.reshape(img0.size[1], img0.size[0], 3)
   return img[:, :, [2, 1, 0]].astype(np.uint8)
+
 
 def imgPil2Ipl(img0):
   """
@@ -506,6 +614,7 @@ def imgPil2Ipl(img0):
   cv2.cv.SetData(result, img0.rotate(180).tostring()[::-1], step)
 
   return result
+
 
 def imgDateInfo2Time(ts):
   """
@@ -640,39 +749,5 @@ def imgDistort(img0, sca=1.5, rotMa=0, randSca=False):
   hD = int(np.random.rand(1) * (h - h0))
   wD = int(np.random.rand(1) * (w - w0))
   img[hD : hD + h0, wD : wD + w0, :] = img1
-
-  return img
-
-
-def imgMerge(img0s, alg='max'):
-  """
-  Merge multiple images of the same scale to a new image.
-
-  Input
-    img0s  -  input img, m x, h x w x nC
-    alg    -  pixel merge algorithm, {'max'} | 'ave'
-                'max': pick the maximum pixel
-                'ave': compute the average pixel
-
-  Output
-    img    -  new img, h x w x nC
-  """
-  # dimension
-  m = len(img0s)
-  h, w, nC = img0s[0].shape
-
-  # put in a big matrix
-  Img0 = np.zeros((m, h, w, nC))
-  for i in range(m):
-    Img0[i] = img0s[i]
-
-  if alg == 'max':
-    img = Img0.max(axis=0)
-
-  elif alg == 'ave':
-    img = Img0.sum(axis=0) / m
-
-  else:
-    raise Exception('unknown alg: {}'.format(alg))
 
   return img
