@@ -177,6 +177,9 @@ def imgOversample(img0s, h=224, w=224, view='mul'):
       for j in w_indices:
         crops_ix[curr] = (i, j, i + crop_dims[0], j + crop_dims[1])
         curr += 1
+    crops_ix[4] = np.tile(im_center, (1, 2)) + np.concatenate([
+        -crop_dims / 2.0, crop_dims / 2.0
+    ])
     crops_ix = np.tile(crops_ix, (2, 1))
   m = len(crops_ix)
 
@@ -186,7 +189,10 @@ def imgOversample(img0s, h=224, w=224, view='mul'):
   ix = 0
   for im in img0s:
     for crop in crops_ix:
-      crops[ix] = im[crop[0] : crop[2], crop[1] : crop[3], :]
+      try:
+        crops[ix] = im[crop[0] : crop[2], crop[1] : crop[3], :]
+      except ValueError:
+        import pdb; pdb.set_trace()
       ix += 1
 
     # flip for mirrors
