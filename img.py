@@ -53,6 +53,34 @@ def imgCrop(img0, box, isOkOut=False):
   return img
 
 
+def imgFlip(img0, dire='lr'):
+  """
+  Flip an image left-to-right or up-to-down.
+
+  Input
+    img0     -  image, h x w x nChan
+    dire     -  direction to flip, {'lr'} | 'ud'
+                  'lr': left-to-right
+                  'ud': up-to-down
+
+  Output
+    img      -  flipped image, h x w x nChan
+  """
+  # dimension
+  h, w, nChan = img0.shape
+
+  img = np.array(img0)
+  for iChan in xrange(nChan):
+    if dire == 'lr':
+      img[:, :, iChan] = np.fliplr(img0[:, :, iChan])
+    elif dire == 'ud':
+      img[:, :, iChan] = np.flipud(img0[:, :, iChan])
+    else:
+      raise Exception('unknown dire: {}'.format(dire))
+
+  return img
+
+
 def imgIplCrop(imgPath0, imgPath, target_h=120, target_w=90):
   """
   Crop an image patch within a bounding box using IPL library.
