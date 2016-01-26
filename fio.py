@@ -62,7 +62,7 @@ def mkDir(dirPath, mkL=0):
   if dirPath == '':
     return
 
-  if not os.path.exists(dirPath) or not os.path.isfile(dirPath):
+  if not os.path.exists(dirPath):
     os.makedirs(dirPath)
 
   else:
