@@ -4,7 +4,7 @@ File IO utility functions.
 
 History
   create  -  Feng Zhou (zhfe99@gmail.com), 2015-03
-  modify  -  Feng Zhou (zhfe99@gmail.com), 2015-12
+  modify  -  Feng Zhou (zhfe99@gmail.com), 2016-01
 """
 import os
 import csv
@@ -62,8 +62,9 @@ def mkDir(dirPath, mkL=0):
   if dirPath == '':
     return
 
-  if not os.path.exists(dirPath):
+  if not os.path.exists(dirPath) or not os.path.isfile(dirPath):
     os.makedirs(dirPath)
+
   else:
     if mkL == 1:
       import shutil
