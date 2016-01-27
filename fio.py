@@ -513,7 +513,7 @@ def lmdbR(ha):
     ha['cur'].first()
   else:
     if not ha['cur'].next():
-      return None, None, None
+      return None, None
   ha['co'] += 1
 
   # get key & value
