@@ -188,7 +188,7 @@ def savePath(fold, prex, subx=None, type=None):
 
   Input
     fold  -  fold
-    prex  -  path prefix
+    prex  -  path prefix, None | ...
     subx  -  subfix, {None}
     type  -  type, None
 
@@ -200,6 +200,9 @@ def savePath(fold, prex, subx=None, type=None):
 
   # create fold if necessary
   mkDir(saveFold)
+
+  if prex is None:
+    return saveFold
 
   # subfix
   if subx is not None:
