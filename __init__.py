@@ -4,7 +4,7 @@ Init py_lib module.
 
 History
   create  -  Feng Zhou (zhfe99@gmail.com), 2015-09
-  modify  -  Feng Zhou (zhfe99@gmail.com), 2015-12
+  modify  -  Feng Zhou (zhfe99@gmail.com), 2016-01
 """
 import os
 from sh import *
@@ -17,6 +17,7 @@ from str import *
 from dct import *
 from dst import *
 from tran import *
+from lib_clf import *
 
 def init(prL=2, isOut=False):
   """

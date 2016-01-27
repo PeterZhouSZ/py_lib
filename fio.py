@@ -102,15 +102,15 @@ def rmFile(path):
 
 def save(filepath, data, svL=1):
   """
-  Save data as a pickle format.
+  Save data as a pickle-format file.
 
   Input
     filepath  -  file name
     data      -  data
     svL       -  save level, 0 | {1} | 2
-                  0: write to pathDst even it exist
-                  1: write to pathDst even it exist
-                  2: not write to pathDst if it exist
+                   0: write to pathDst even it exist
+                   1: write to pathDst even it exist
+                   2: not write to pathDst if it exist
   """
   import cPickle
 
@@ -137,9 +137,8 @@ def load(filename):
   """
   import cPickle
 
-  fo = open(filename, 'r')
-  data = cPickle.load(fo)
-  fo.close()
+  with open(filename, 'r') as fo:
+    data = cPickle.load(fo)
   return data
 
 
@@ -226,7 +225,6 @@ def exist(nm, type='file'):
   Output
     res   -  status, 'True' | 'False'
   """
-
   if nm is None:
     return False
 

@@ -4,7 +4,7 @@ Cell-related functions.
 
 History
   create  -  Feng Zhou (zhfe99@gmail.com), 2015-02
-  modify  -  Feng Zhou (zhfe99@gmail.com), 2015-12
+  modify  -  Feng Zhou (zhfe99@gmail.com), 2016-01
 """
 import numpy as np
 
@@ -70,10 +70,10 @@ def lists(len, n=1):
 
 def zeros(shape, n=1):
   """
-  Create zero numpy matrices.
+  Create n zero numpy matrices.
 
   Example
-    a, b, c = zeros((3), n=3)
+    a, b, c = zeros((3, 4), n=3)
 
   Input
     shape  -  shape tuple
@@ -85,7 +85,6 @@ def zeros(shape, n=1):
   if n == 0:
     return
 
-  # res = tuple(np.zeros(shape, dtype=np.object) for i in range(n))
   res = tuple(np.zeros(shape) for i in range(n))
 
   if n == 1:
@@ -119,7 +118,7 @@ def rands(shape, n=1):
 
 def ods(n=1):
   """
-  Create a set of OrderedDict.
+  Create n OrderedDict objects.
 
   Input
     n      -  #output, {1} | 2 | ...
