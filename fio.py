@@ -100,7 +100,7 @@ def rmFile(path):
     os.remove(path)
 
 
-def save(filepath, data, svL=1):
+def save(filepath, data, svL=1, fmt='pkl'):
   """
   Save data as a pickle-format file.
 
@@ -111,9 +111,8 @@ def save(filepath, data, svL=1):
                    0: write to pathDst even it exist
                    1: write to pathDst even it exist
                    2: not write to pathDst if it exist
+    fmt       -  format, {'pkl'} | 'hkl' | 'h5'
   """
-  import cPickle
-
   if svL == 0 or filepath is None:
     return
 
@@ -121,33 +120,59 @@ def save(filepath, data, svL=1):
   foldPath = os.path.dirname(filepath)
   mkDir(foldPath)
 
-  with open(filepath, "w") as fo:
-    cPickle.dump(data, fo, protocol=cPickle.HIGHEST_PROTOCOL)
+  if fmt == 'pkl':
+    # use pickle
+    import cPickle
+    with open(filepath, "w") as fo:
+      cPickle.dump(data, fo, protocol=cPickle.HIGHEST_PROTOCOL)
+
+  elif fmt == 'hkl':
+    # use hickle, which is faster for large-scale data
+    # https://github.com/telegraphic/hickle
+    import hickle
+    with open(filepath, "w") as fo:
+      hickle.dump(data, fo)
+
+  else:
+    raise Exception('unknown fmt: {}'.format(fmt))
 
 
-def load(filename):
+def load(filepath, fmt='pkl'):
   """
   Load data from a pickle-format file.
 
   Input
-    filename  -  filename
+    filepath  -  filepath
+    fmt       -  format, {'pkl'} | 'hkl' | 'h5'
 
   Output
     data      -  data
   """
-  import cPickle
+  if fmt == 'pkl':
+    # use pickle
+    import cPickle
+    with open(filepath, 'r') as fo:
+      data = cPickle.load(fo)
 
-  with open(filename, 'r') as fo:
-    data = cPickle.load(fo)
+  elif fmt == 'hkl':
+    # use hickle, which is faster for large-scale
+    import hickle
+    import pdb; pdb.set_trace()
+    with open(filepath, "r") as fo:
+      data = hickle.load(fo)
+
+  else:
+    raise Exception('unknown fmt: {}'.format(fmt))
+
   return data
 
 
-def loadH5(filename, varNm, dtype=None):
+def loadH5(filepath, varNm, dtype=None):
   """
   Load data from a hdf5 file.
 
   Input
-    filename  -  filename
+    filepath  -  filepath
     varNm     -  variable name
     dtype     -  type, {None} | np.double | ...
 
@@ -157,7 +182,7 @@ def loadH5(filename, varNm, dtype=None):
   import h5py
   import numpy as np
 
-  file = h5py.File(filename, 'r')
+  file = h5py.File(filepath, 'r')
   data0 = file[varNm]
   if dtype is None:
     data = np.asarray(data0)
@@ -167,51 +192,60 @@ def loadH5(filename, varNm, dtype=None):
   return data
 
 
-def saveH5(filename, data, varNm):
+def saveH5(filepath, varNm, data):
   """
   Save data in hdf5 file.
 
   Input
-    filename  -  filename
+    filepath  -  filepath
     data      -  data
     varNm     -  variable name
   """
   import h5py
-  file = h5py.File(filename, "w")
+  file = h5py.File(filepath, "w")
   file.create_dataset(varNm, data=data)
   file.close()
 
 
-def savePath(fold, prex, subx=None, type=None):
+def savePath(fold, prex, subx=None, type='file'):
   """
-  Get the save path.
+  Generate save path dynamically.
+
+  Put file under $save if the environment variable, 'save', defined.
+  Otherwise, put file under $HOME/save
 
   Input
     fold  -  fold
-    prex  -  path prefix, None | ...
-    subx  -  subfix, {None}
-    type  -  type, None
+    prex  -  file name prefix, None | ...
+    subx  -  file name suffix, {None} | 'txt' | 'pkl' | ...
+    type  -  type, {'file'} | 'fold'
 
   Output
     path  -  file path
   """
+  # fold path
   saveFold = os.getenv('save', os.path.join(os.environ['HOME'], 'save'))
   saveFold = os.path.join(saveFold, fold)
 
   # create fold if necessary
   mkDir(saveFold)
 
+  # no file
   if prex is None:
     return saveFold
 
   # subfix
   if subx is not None:
-    prex = prex + '_' + subx
+    prex = prex + '.' + subx
 
-  if type is None:
-    path = os.path.join(saveFold, prex)
-  elif type == 'txt':
-    path = os.path.join(saveFold, prex + '.txt')
+  # type
+  path = os.path.join(saveFold, prex)
+  if type == 'file':
+    pass
+
+  elif type == 'fold':
+    mkDir(path)
+
   else:
     raise Exception('unknown type: {}'.format(type))
   return path
