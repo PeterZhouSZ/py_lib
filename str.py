@@ -4,7 +4,7 @@ String-related functions.
 
 History
   create  -  Feng Zhou (zhfe99@gmail.com), 2014-12
-  modify  -  Feng Zhou (zhfe99@gmail.com), 2015-12
+  modify  -  Feng Zhou (zhfe99@gmail.com), 2016-01
 """
 import re
 from cell import zeros
